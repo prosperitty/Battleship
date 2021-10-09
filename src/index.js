@@ -1,0 +1,72 @@
+// import './style.scss';
+export { Gameboard, Ship };
+
+function Gameboard() {
+  let board = [[], [], [], [], [], [], [], [], [], []];
+
+  function initializeCoordinates() {
+    const letterCoordinate = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+    for (let i = 0; i < 10; i++) {
+      for (let j = 0; j < 10; j++) {
+        board[i][j] = {
+          coordinate: `${letterCoordinate[i]}${j}`,
+          ship: null,
+          isHit: false,
+        };
+      }
+    }
+  }
+
+  const placeShips = (board) => {
+    const carrier = Ship('carrier', 5);
+    const battleship = Ship(4);
+    const cruiser = Ship(3);
+    const destroyer1 = Ship(2);
+    const destroyer2 = Ship(2);
+    const submarine1 = Ship(1);
+    const submarine2 = Ship(1);
+
+    for (let i = 0; i < carrier.shipStatus.health; i++) {
+      board[0][i].ship = carrier.shipStatus;
+    }
+  };
+
+  return { board, initializeCoordinates, placeShips };
+}
+
+function Ship(type, length) {
+  let shipStatus = { health: length, type: type };
+
+  const positionHit = (board) => {
+    const indexes = board
+      .reduce((a, b) => a.concat(b))
+      .filter((coordinate) => coordinate.isHit === true);
+    return indexes;
+  };
+
+  const hit = (board, num) => {
+    let reducedPosition = findCoordinate(board, num);
+    for (let row of board) {
+      for (let plot of row) {
+        if (plot.coordinate === reducedPosition.coordinate) {
+          plot.isHit = true;
+        }
+      }
+    }
+  };
+
+  const isSunk = (coordinate) => {
+    if (shipStatus.health === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  return { positionHit, hit, isSunk, shipStatus };
+}
+
+function findCoordinate(board, num) {
+  const reducedBoard = board.reduce((a, b) => a.concat(b));
+  return reducedBoard[num];
+}
