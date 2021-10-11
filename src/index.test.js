@@ -51,7 +51,7 @@ test('check if all positions hit and ship is sunk', () => {
   practiceBoard[0][0].ship.health -= 5;
   console.log(carrier.shipStatus);
   console.log(practiceBoard[0][1].ship);
-  expect(carrier.isSunk()).toBeTruthy();
+  expect(carrier.isSunk(practiceBoard)).toBeTruthy();
 });
 
 test('place ships on board at specific coordinates', () => {
