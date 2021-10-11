@@ -55,8 +55,8 @@ function Ship(type, length) {
     }
   };
 
-  const isSunk = (coordinate) => {
-    if (shipStatus.health === 0) {
+  const isSunk = (board) => {
+    if (shipStatus.health === 0 && isAllPositionsHit(board,type)) {
       return true;
     } else {
       return false;
@@ -64,6 +64,16 @@ function Ship(type, length) {
   };
 
   return { positionHit, hit, isSunk, shipStatus };
+}
+
+function isAllPositionsHit(board,type) {
+  for (let row of board) {
+    for (let plot of row) {
+      if (plot.ship.type === type && plot.isHit === true) {
+        return true;
+      }
+    }
+  }
 }
 
 function findCoordinate(board, num) {
