@@ -1,4 +1,4 @@
-// import './style.scss';
+import './style.scss';
 export { Gameboard, Ship };
 
 function Gameboard() {
@@ -19,16 +19,29 @@ function Gameboard() {
 
   const placeShips = (board) => {
     const carrier = Ship('carrier', 5);
-    const battleship = Ship(4);
-    const cruiser = Ship(3);
-    const destroyer1 = Ship(2);
-    const destroyer2 = Ship(2);
-    const submarine1 = Ship(1);
-    const submarine2 = Ship(1);
+    const battleship = Ship('battleship',4);
+    const cruiser = Ship('cruiser',3);
+    const destroyer1 = Ship('destroyer1',2);
+    const destroyer2 = Ship('destroyer2',2);
+    const submarine1 = Ship('submarine1',1);
+    const submarine2 = Ship('submarine2',1);
 
     for (let i = 0; i < carrier.shipStatus.health; i++) {
       board[0][i].ship = carrier.shipStatus;
     }
+    for (let i = 0; i < battleship.shipStatus.health; i++) {
+      board[9][i].ship = battleship.shipStatus;
+    }
+    for (let i = 0; i < cruiser.shipStatus.health; i++) {
+      board[2][i].ship = cruiser.shipStatus;
+    }
+    for (let i = 0; i < destroyer1.shipStatus.health; i++) {
+      board[4][i].ship = destroyer1.shipStatus;
+    }
+    board[4][4].ship = destroyer2.shipStatus;
+    board[4][5].ship = destroyer2.shipStatus;
+    board[6][7].ship = submarine1.shipStatus;
+    board[2][8].ship = submarine2.shipStatus;
   };
 
   return { board, initializeCoordinates, placeShips };
