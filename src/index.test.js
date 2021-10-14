@@ -7,6 +7,7 @@ test('coordinate assignment', () => {
     coordinate: 'A0',
     ship: null,
     isHit: false,
+    isMiss: false,
   });
 });
 
@@ -58,5 +59,13 @@ test('place ships on board at specific coordinates', () => {
   const game = Gameboard();
   game.initializeCoordinates();
   game.placeShips(game.board);
-  expect(game.board[0][4].ship).toEqual({ health: 5, type: 'carrier' });
+  expect(game.board[0][4].ship.shipStatus).toEqual({ health: 5, type: 'carrier' });
+});
+
+test('determine if ship was missed or hit and send hit function', () => {
+  const game = Gameboard();
+  game.initializeCoordinates();
+  game.receiveAttack(1);
+  console.log(game.board[0][1]);
+  expect(game.board[0][1].isMiss).toBeTruthy();
 });
