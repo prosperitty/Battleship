@@ -1,4 +1,4 @@
-import './style.scss';
+// import './style.scss';
 export { Gameboard, Ship };
 
 function Gameboard() {
@@ -12,6 +12,7 @@ function Gameboard() {
           coordinate: `${letterCoordinate[i]}${j}`,
           ship: null,
           isHit: false,
+          isMiss: false,
         };
       }
     }
@@ -27,7 +28,7 @@ function Gameboard() {
     const submarine2 = Ship('submarine2',1);
 
     for (let i = 0; i < carrier.shipStatus.health; i++) {
-      board[0][i].ship = carrier.shipStatus;
+      board[0][i].ship = carrier;
     }
     for (let i = 0; i < battleship.shipStatus.health; i++) {
       board[9][i].ship = battleship.shipStatus;
@@ -44,7 +45,16 @@ function Gameboard() {
     board[2][8].ship = submarine2.shipStatus;
   };
 
-  return { board, initializeCoordinates, placeShips };
+  const receiveAttack = (num) => {
+    let plot = findCoordinate(board, num);
+    if (plot.ship !== null && plot.isHit !== true && plot.isMiss !== true) {
+      return plot.isHit = true;
+    } else if (plot.ship === null && plot.isHit === false && plot.isMiss === false) {
+      return plot.isMiss = true;
+    }
+  };
+
+  return { board, initializeCoordinates, placeShips, receiveAttack };
 }
 
 function Ship(type, length) {
