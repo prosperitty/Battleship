@@ -2,6 +2,13 @@
 export { Gameboard, Ship };
 
 function Gameboard() {
+  let carrier = undefined;
+  let battleship = undefined;
+  let cruiser = undefined;
+  let destroyer1 = undefined;
+  let destroyer2 = undefined;
+  let submarine1 = undefined;
+  let submarine2 = undefined;
   let board = [[], [], [], [], [], [], [], [], [], []];
 
   function initializeCoordinates() {
@@ -18,14 +25,14 @@ function Gameboard() {
     }
   }
 
-  const placeShips = (board) => {
-    const carrier = Ship('carrier', 5);
-    const battleship = Ship('battleship',4);
-    const cruiser = Ship('cruiser',3);
-    const destroyer1 = Ship('destroyer1',2);
-    const destroyer2 = Ship('destroyer2',2);
-    const submarine1 = Ship('submarine1',1);
-    const submarine2 = Ship('submarine2',1);
+  const placeShips = () => {
+    carrier = Ship('carrier', 5);
+    battleship = Ship('battleship', 4);
+    cruiser = Ship('cruiser', 3);
+    destroyer1 = Ship('destroyer1', 2);
+    destroyer2 = Ship('destroyer2', 2);
+    submarine1 = Ship('submarine1', 1);
+    submarine2 = Ship('submarine2', 1);
 
     for (let i = 0; i < carrier.shipStatus.health; i++) {
       board[0][i].ship = carrier;
@@ -48,13 +55,33 @@ function Gameboard() {
   const receiveAttack = (num) => {
     let plot = findCoordinate(board, num);
     if (plot.ship !== null && plot.isHit !== true && plot.isMiss !== true) {
-      return plot.isHit = true;
-    } else if (plot.ship === null && plot.isHit === false && plot.isMiss === false) {
-      return plot.isMiss = true;
+      return plot.ship.hit(board, num);
+    } else if (
+      plot.ship === null &&
+      plot.isHit === false &&
+      plot.isMiss === false
+    ) {
+      return (plot.isMiss = true);
     }
   };
 
-  return { board, initializeCoordinates, placeShips, receiveAttack };
+  const isGameOver = () => {
+    if (
+      carrier.shipStatus.health === 0 &&
+      battleship.shipStatus.health === 0 &&
+      cruiser.shipStatus.health === 0 &&
+      destroyer1.shipStatus.health === 0 &&
+      destroyer2.shipStatus.health === 0 &&
+      submarine1.shipStatus.health === 0 &&
+      submarine2.shipStatus.health === 0
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  return { board, initializeCoordinates, placeShips, receiveAttack, isGameOver };
 }
 
 function Ship(type, length) {
@@ -76,10 +103,11 @@ function Ship(type, length) {
         }
       }
     }
+    shipStatus.health -= 1;
   };
 
   const isSunk = (board) => {
-    if (shipStatus.health === 0 && isAllPositionsHit(board,type)) {
+    if (shipStatus.health === 0 && isAllPositionsHit(board, type)) {
       return true;
     } else {
       return false;
@@ -89,7 +117,7 @@ function Ship(type, length) {
   return { positionHit, hit, isSunk, shipStatus };
 }
 
-function isAllPositionsHit(board,type) {
+function isAllPositionsHit(board, type) {
   for (let row of board) {
     for (let plot of row) {
       if (plot.ship.type === type && plot.isHit === true) {
