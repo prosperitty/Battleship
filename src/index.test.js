@@ -65,7 +65,16 @@ test('place ships on board at specific coordinates', () => {
 test('determine if ship was missed or hit and send hit function', () => {
   const game = Gameboard();
   game.initializeCoordinates();
+  game.placeShips();
   game.receiveAttack(1);
   console.log(game.board[0][1]);
-  expect(game.board[0][1].isMiss).toBeTruthy();
+  expect(game.board[0][1].isMiss).toBeFalsy();
+  expect(game.board[0][1].isHit).toBeTruthy();
+});
+
+test('report whether all ships have been sunk or not', () => {
+  const game = Gameboard();
+  game.initializeCoordinates();
+  game.placeShips();
+  expect(game.isGameOver()).toBeFalsy();
 });
