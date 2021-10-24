@@ -1,7 +1,8 @@
 export { Ship };
 
 function Ship(type, length) {
-  let shipStatus = { health: length, type: type };
+  const getLength = () => length;
+  let shipStatus = { health: length, type };
 
   function getHitPositions(board) {
     const plots = board
@@ -12,40 +13,19 @@ function Ship(type, length) {
     return plots;
   }
 
-  const hit = (board, num) => {
-    let reducedPosition = findCoordinate(board, num);
-    for (let row of board) {
-      for (let plot of row) {
-        if (plot.coordinate === reducedPosition.coordinate) {
-          plot.isHit = true;
-        }
-      }
-    }
+  const hit = (plot) => {
+    plot.isHit = true;
     shipStatus.health -= 1;
   };
 
-  const isSunk = (board) => {
-    if (shipStatus.health === 0 && isAllPositionsHit(board, type)) {
+  function isSunk(board) {
+    let numOfHitPositions = this.getHitPositions(board).length;
+    if (shipStatus.health === 0 && numOfHitPositions === getLength()) {
       return true;
     } else {
       return false;
     }
-  };
-
-  return { getHitPositions, hit, isSunk, shipStatus };
-}
-
-function isAllPositionsHit(board, type) {
-  for (let row of board) {
-    for (let plot of row) {
-      if (plot.ship.type === type && plot.isHit === true) {
-        return true;
-      }
-    }
   }
-}
 
-function findCoordinate(board, num) {
-  const reducedBoard = board.reduce((a, b) => a.concat(b));
-  return reducedBoard[num];
+  return { getHitPositions, hit, isSunk, shipStatus, getLength };
 }
