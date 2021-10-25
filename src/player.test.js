@@ -1,4 +1,4 @@
-import { Player } from "./player";
+import { Player } from './player';
 
 test('toggle players turn', () => {
   const player1 = Player('player1');

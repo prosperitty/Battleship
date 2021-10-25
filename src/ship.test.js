@@ -1,7 +1,7 @@
 import { Gameboard } from './gameboard';
 import { Ship } from './ship';
 
-test("find coordinate of ship's hit spot", () => {
+test('find coordinate of ship\'s hit spot', () => {
   const game = Gameboard();
   const destroyer1 = Ship('destroyer1', 2);
   game.board[4][4].ship = destroyer1;
@@ -10,8 +10,8 @@ test("find coordinate of ship's hit spot", () => {
   game.board[4][4].isHit = true;
   game.board[4][5].isHit = true;
   expect(destroyer1.getHitPositions(game.board)).toEqual([
-    { coordinate: [4,4], ship: destroyer1, isHit: true, isMiss: false },
-    { coordinate: [4,5], ship: destroyer1, isHit: true, isMiss: false },
+    { coordinate: [4, 4], ship: destroyer1, isHit: true, isMiss: false },
+    { coordinate: [4, 5], ship: destroyer1, isHit: true, isMiss: false },
   ]);
 });
 
