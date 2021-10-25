@@ -1,5 +1,5 @@
-export { Gameboard };
 import { Ship } from './ship';
+export { Gameboard };
 
 function Gameboard() {
   const carrier = Ship('carrier', 5);
@@ -11,18 +11,16 @@ function Gameboard() {
   const submarine2 = Ship('submarine2', 1);
   let board = [[], [], [], [], [], [], [], [], [], []];
 
-  (function initializeCoordinates() {
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) {
-        board[i][j] = {
-          coordinate: [i,j],
-          ship: null,
-          isHit: false,
-          isMiss: false,
-        };
-      }
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      board[i][j] = {
+        coordinate: [i, j],
+        ship: null,
+        isHit: false,
+        isMiss: false,
+      };
     }
-  })();
+  }
 
   const placeShips = () => {
     for (let i = 0; i < carrier.getLength(); i++) {
@@ -44,14 +42,16 @@ function Gameboard() {
 
   const receiveAttack = (row, column) => {
     let plot = board[row][column];
-    if (plot.ship !== null && plot.isHit !== true && plot.isMiss !== true) {
+    if (plot.ship !== null && plot.isHit === false && plot.isMiss === false) {
       return plot.ship.hit(plot);
     } else if (
       plot.ship === null &&
       plot.isHit === false &&
       plot.isMiss === false
     ) {
-      return (plot.isMiss = true);
+      return plot.isMiss = true;
+    } else if (plot.isHit === true || plot.isMiss === true) {
+      return 'plot has been struck already';
     }
   };
 
