@@ -1,3 +1,37 @@
 body {
   background-color: rgb(94, 170, 177);
 }
+
+header {
+  text-align: center;
+}
+
+.gameboards-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.button-reset {
+  display: none;
+}
+
+.gameboards-container {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+
+.gameboard-grid {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+}
+
+.gameboard-grid-item:hover {
+  border: 1px solid white;
+}
+
+.gameboard-grid-item {
+  height: 40px;
+  width: 40px;
+  border: 1px solid red;
+}
