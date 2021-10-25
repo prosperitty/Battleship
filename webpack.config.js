@@ -7,6 +7,8 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
+    //this is used to auto refresh and update the webpack built html file when saved. set to true to stop.
+    hot: false,
   },
   plugins: [
     new HtmlWebpackPlugin({
