@@ -9,24 +9,28 @@ function Game() {
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
       displayContent();
-      createGameboard();
+      createGameboards();
+      setUpPlayers();
     });
   }
 
   return { initialize };
 }
 
-function createGameboard() {
+function setUpPlayers() {
+  const player = Player('player', Gameboard());
+  const computer = Player('computer', Gameboard());
+}
+
+function createGameboards() {
   const gameboard = document.querySelectorAll('.gameboard-grid');
   for (let i = 0; i < 100; i++) {
-    const plot = document.createElement('div');
-    plot.classList.add('gameboard-grid-item');
-    gameboard[0].appendChild(plot);
-  }
-  for (let i = 0; i < 100; i++) {
-    const plot = document.createElement('div');
-    plot.classList.add('gameboard-grid-item');
-    gameboard[1].appendChild(plot);
+    const plots1 = document.createElement('div');
+    const plots2 = document.createElement('div');
+    plots1.classList.add('gameboard-grid-item');
+    plots2.classList.add('gameboard-grid-item');
+    gameboard[0].appendChild(plots1);
+    gameboard[1].appendChild(plots2);
   }
 }
 
