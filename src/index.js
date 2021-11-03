@@ -10,27 +10,57 @@ function Game() {
       startBtn.style.display = 'none';
       displayContent();
       createGameboards();
-      setUpPlayers();
+      startGame();
     });
   }
 
   return { initialize };
 }
 
-function setUpPlayers() {
-  const player = Player('player', Gameboard());
-  const computer = Player('computer', Gameboard());
+function startGame(element) {
+  const gameboards = document.querySelectorAll('.gameboard-grid');
+  const player = Player('player');
+  const computer = Player('computer');
+  const playerUIBoard = [...gameboards[0].children];
+  const computerUIBoard = [...gameboards[1].children];
+  const playerGameboard = Gameboard(gameboards[0].children);
+  const computerGameboard = Gameboard(gameboards[1].children);
+  playerGameboard.placeShips();
+  computerGameboard.placeShips();
+  player.toggleTurn();
+
+  computerUIBoard.forEach((plot) => {
+    plot.addEventListener('click', () => {
+      if (player.turn) {
+        player.attack(computerGameboard, parseInt(plot.dataset.x), parseInt(plot.dataset.y));
+        computer.toggleTurn();
+        let coordinates = computer.attack(playerGameboard);
+        console.log(coordinates);
+        playerUIBoard[coordinates].style.background = 'green';
+        player.toggleTurn();
+      }
+        console.log(computerGameboard.board);
+        // console.log(playerGameboard.board);
+        plot.style.background = 'green';
+    });
+  });
 }
 
 function createGameboards() {
   const gameboard = document.querySelectorAll('.gameboard-grid');
-  for (let i = 0; i < 100; i++) {
-    const plots1 = document.createElement('div');
-    const plots2 = document.createElement('div');
-    plots1.classList.add('gameboard-grid-item');
-    plots2.classList.add('gameboard-grid-item');
-    gameboard[0].appendChild(plots1);
-    gameboard[1].appendChild(plots2);
+  for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+      const plot1 = document.createElement('div');
+      const plot2 = document.createElement('div');
+      plot1.classList.add('gameboard-grid-item');
+      plot2.classList.add('gameboard-grid-item');
+      plot1.dataset.x = i;
+      plot1.dataset.y = j;
+      plot2.dataset.x = i;
+      plot2.dataset.y = j;
+      gameboard[0].appendChild(plot1);
+      gameboard[1].appendChild(plot2);
+    }
   }
 }
 
