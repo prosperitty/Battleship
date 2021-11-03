@@ -7,17 +7,21 @@ header {
 }
 
 .gameboards-container {
+  margin-top: 50px;
   display: flex;
   justify-content: space-around;
+  flex-wrap: wrap;
+
+  opacity: 0;
+  transition: 0.2s ease-in-out;
 }
 
 .button-reset {
   display: none;
 }
 
-.gameboards-container {
-  opacity: 0;
-  transition: 0.2s ease-in-out;
+.gameboard-container {
+  padding: 30px;
 }
 
 .gameboard-grid {
