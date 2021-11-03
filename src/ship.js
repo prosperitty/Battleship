@@ -3,6 +3,7 @@ export { Ship };
 function Ship(type, length) {
   const getLength = () => length;
   let shipStatus = { health: length, type };
+  let hitPositions = [];
 
   function getHitPositions(board) {
     const plots = board
@@ -13,14 +14,14 @@ function Ship(type, length) {
     return plots;
   }
 
-  const hit = (plot) => {
-    plot.isHit = true;
+  const hit = (position) => {
+    hitPositions.push(position);
     shipStatus.health -= 1;
   };
 
-  function isSunk(board) {
-    let numOfHitPositions = this.getHitPositions(board).length;
-    if (shipStatus.health === 0 && numOfHitPositions === getLength()) {
+  function isSunk() {
+    // let numOfHitPositions = this.getHitPositions(board).length;
+    if (shipStatus.health === 0 && hitPositions.length === getLength()) {
       return true;
     } else {
       return false;
