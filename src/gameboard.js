@@ -1,7 +1,7 @@
 import { Ship } from './ship';
 export { Gameboard };
 
-function Gameboard() {
+function Gameboard(uiBoard) {
   const carrier = Ship('carrier', 5);
   const battleship = Ship('battleship', 4);
   const cruiser = Ship('cruiser', 3);
@@ -22,15 +22,18 @@ function Gameboard() {
     }
   }
 
-  const placeShips = () => {
+  function placeShips() {
     for (let i = 0; i < carrier.getLength(); i++) {
       board[0][i].ship = carrier;
+      displayShips(board, uiBoard, board[0][i]);
     }
     for (let i = 0; i < battleship.getLength(); i++) {
       board[9][i].ship = battleship;
+      displayShips(board, uiBoard, board[9][i]);
     }
     for (let i = 0; i < cruiser.getLength(); i++) {
       board[2][i].ship = cruiser;
+      displayShips(board, uiBoard, board[2][i]);
     }
     board[4][0].ship = destroyer1;
     board[4][1].ship = destroyer1;
@@ -38,22 +41,34 @@ function Gameboard() {
     board[4][5].ship = destroyer2;
     board[6][7].ship = submarine1;
     board[2][8].ship = submarine2;
-  };
+    displayShips(board, uiBoard, board[4][0]);
+    displayShips(board, uiBoard, board[4][1]);
+    displayShips(board, uiBoard, board[4][4]);
+    displayShips(board, uiBoard, board[4][5]);
+    displayShips(board, uiBoard, board[6][7]);
+    displayShips(board, uiBoard, board[2][8]);
+  }
 
-  const receiveAttack = (row, column) => {
-    let plot = board[row][column];
+  function receiveAttack(row, column) {
+    let plot = this.board[row][column];
     if (plot.ship !== null && plot.isHit === false && plot.isMiss === false) {
-      return plot.ship.hit(plot);
+      plot.ship.hit();
+      plot.isHit = true;
+      console.log(plot);
+      return true;
     } else if (
       plot.ship === null &&
       plot.isHit === false &&
       plot.isMiss === false
     ) {
-      return plot.isMiss = true;
+      plot.isMiss = true;
+      console.log(plot);
+      return true;
     } else if (plot.isHit === true || plot.isMiss === true) {
-      return 'plot has been struck already';
+      console.log('plot has already been hit');
+      return false;
     }
-  };
+  }
 
   const isGameOver = () => {
     if (
@@ -71,7 +86,13 @@ function Gameboard() {
     }
   };
 
-  return { board, placeShips, receiveAttack, isGameOver };
+  return { board, placeShips ,receiveAttack, isGameOver };
+}
+
+function displayShips(board, uiBoard, location) {
+  const reducedBoard = board.flat();
+  let uiIndex = reducedBoard.indexOf(location);
+  uiBoard[uiIndex].style.background = 'black';
 }
 
 // function findCoordinate(board, num) {
