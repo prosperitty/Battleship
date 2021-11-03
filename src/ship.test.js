@@ -15,13 +15,13 @@ test('find coordinate of ship\'s hit spot', () => {
   ]);
 });
 
-test('take a number and mark plot as hit', () => {
+test('reduce the health of a ship by 1', () => {
   const game = Gameboard();
   const destroyer1 = Ship('destroyer1', 2);
   game.board[0][0].ship = destroyer1;
   game.board[0][1].ship = destroyer1;
   destroyer1.hit(game.board[0][0]);
-  expect(game.board[0][0].isHit).toBeTruthy();
+  expect(destroyer1.shipStatus.health).toEqual(1);
 });
 
 test('check if all positions hit and ship is sunk', () => {
