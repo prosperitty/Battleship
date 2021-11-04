@@ -3,22 +3,24 @@ export { Player };
 
 function Player(name) {
   let turn = false;
-  
+
   function toggleTurn() {
-    this.turn ? this.turn = false : this.turn = true;
+    this.turn ? (this.turn = false) : (this.turn = true);
   }
 
   function attack(enemyBoard, row, column) {
     if (this.turn && name === 'player') {
       if (enemyBoard.receiveAttack(row, column)) {
-        console.log(row, column);
         this.toggleTurn();
       }
     } else if (this.turn && name === 'computer') {
       let randomCoordinate = [randomNum(), randomNum()];
-      enemyBoard.receiveAttack(...randomCoordinate);
-      this.toggleTurn();
-      return findReducedIndex(enemyBoard, ...randomCoordinate);
+      if (enemyBoard.receiveAttack(...randomCoordinate)) {
+        this.toggleTurn();
+        return findReducedIndex(enemyBoard, ...randomCoordinate);
+      } else {
+        return this.attack(enemyBoard);
+      }
     }
   }
 
@@ -28,7 +30,7 @@ function Player(name) {
   }
 
   function randomNum() {
-    return Math.round(Math.random() * (0 - 10) + 10);
+    return Math.round(Math.random() * (0 - 9) + 9);
   }
 
   return { attack, turn, toggleTurn };
