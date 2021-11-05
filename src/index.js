@@ -17,7 +17,7 @@ function Game() {
   return { initialize };
 }
 
-function startGame(element) {
+function startGame() {
   const gameboards = document.querySelectorAll('.gameboard-grid');
   const player = Player('player');
   const computer = Player('computer');
@@ -31,17 +31,24 @@ function startGame(element) {
 
   computerUIBoard.forEach((plot) => {
     plot.addEventListener('click', () => {
-      if (player.turn) {
-        player.attack(computerGameboard, parseInt(plot.dataset.x), parseInt(plot.dataset.y));
-        computer.toggleTurn();
-        let coordinates = computer.attack(playerGameboard);
-        console.log(coordinates);
-        playerUIBoard[coordinates].style.background = 'green';
-        player.toggleTurn();
-      }
-        console.log(computerGameboard.board);
-        // console.log(playerGameboard.board);
-        plot.style.background = 'green';
+      let rowIndex = parseInt(plot.dataset.x);
+      let columnIndex = parseInt(plot.dataset.y);
+      if (player.turn && !isGameOver(playerGameboard, computerGameboard)) {
+        if (
+          computerGameboard.board[rowIndex][columnIndex].isMiss === false &&
+          computerGameboard.board[rowIndex][columnIndex].isHit === false
+        ) {
+          player.attack(computerGameboard, rowIndex, columnIndex);
+          computer.toggleTurn();
+          let coordinates = computer.attack(playerGameboard);
+          console.log(coordinates);
+          playerUIBoard[coordinates].style.background = 'green';
+          player.toggleTurn();
+          plot.style.background = 'green';
+        } else {
+          console.log('try again!');
+        }
+      } 
     });
   });
 }
@@ -69,6 +76,16 @@ function displayContent() {
   const gameboardsContainer = document.querySelector('.gameboards-container');
   resetBtn.style.display = 'inline-block';
   gameboardsContainer.style.opacity = 1;
+}
+
+function isGameOver(playersBoard, computersBoard) {
+  if (playersBoard.isGameOver()) {
+    return true;
+  } else if (computersBoard.isGameOver()) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 Game().initialize();
