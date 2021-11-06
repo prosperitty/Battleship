@@ -14,19 +14,14 @@ function Player(name) {
         this.toggleTurn();
       }
     } else if (this.turn && name === 'computer') {
-      let randomCoordinate = [randomNum(), randomNum()];
-      if (enemyBoard.receiveAttack(...randomCoordinate)) {
+      let randomCoordinates = [randomNum(), randomNum()];
+      if (enemyBoard.receiveAttack(...randomCoordinates)) {
         this.toggleTurn();
-        return findReducedIndex(enemyBoard, ...randomCoordinate);
+        return randomCoordinates;
       } else {
         return this.attack(enemyBoard);
       }
     }
-  }
-
-  function findReducedIndex(enemyBoard, x, y) {
-    let flatBoard = enemyBoard.board.flat();
-    return flatBoard.indexOf(enemyBoard.board[x][y]);
   }
 
   function randomNum() {
