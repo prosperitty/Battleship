@@ -1,91 +1,81 @@
 import './style.scss';
 import { Gameboard } from './gameboard';
 import { Player } from './player';
+import { Controller } from './dom';
 import { Ship } from './ship';
 
 function Game() {
+  const controller = Controller();
+
   function initialize() {
     const startBtn = document.querySelector('.button-start');
     startBtn.addEventListener('click', () => {
       startBtn.style.display = 'none';
-      displayContent();
-      createGameboards();
+      controller.displayUIHeader();
+      controller.createUIGameboards();
       startGame();
     });
   }
 
-  return { initialize };
-}
+  function startGame() {
+    const gameboards = document.querySelectorAll('.gameboard-grid');
+    const player = Player('player');
+    const computer = Player('computer');
+    const playerUIBoard = [...gameboards[0].children];
+    const computerUIBoard = [...gameboards[1].children];
+    const playerGameboard = Gameboard(gameboards[0].children);
+    const computerGameboard = Gameboard(gameboards[1].children);
+    playerGameboard.placeShips();
+    computerGameboard.placeShips();
+    player.toggleTurn();
 
-function startGame() {
-  const gameboards = document.querySelectorAll('.gameboard-grid');
-  const player = Player('player');
-  const computer = Player('computer');
-  const playerUIBoard = [...gameboards[0].children];
-  const computerUIBoard = [...gameboards[1].children];
-  const playerGameboard = Gameboard(gameboards[0].children);
-  const computerGameboard = Gameboard(gameboards[1].children);
-  playerGameboard.placeShips();
-  computerGameboard.placeShips();
-  player.toggleTurn();
+    computerUIBoard.forEach((plot) => {
+      plot.addEventListener('click', () => {
+        let rowIndex = parseInt(plot.dataset.x);
+        let colIndex = parseInt(plot.dataset.y);
+        if (player.turn && !isGameOver(playerGameboard, computerGameboard)) {
+          if (
+            computerGameboard.board[rowIndex][colIndex].isMiss === false &&
+            computerGameboard.board[rowIndex][colIndex].isHit === false
+          ) {
+            player.attack(computerGameboard, rowIndex, colIndex);
+            if (computerGameboard.board[rowIndex][colIndex].isHit) {
+              controller.showHitMarker(plot);
+            } else if (computerGameboard.board[rowIndex][colIndex].isMiss) {
+              controller.showMissMarker(plot);
+            }
 
-  computerUIBoard.forEach((plot) => {
-    plot.addEventListener('click', () => {
-      let rowIndex = parseInt(plot.dataset.x);
-      let columnIndex = parseInt(plot.dataset.y);
-      if (player.turn && !isGameOver(playerGameboard, computerGameboard)) {
-        if (
-          computerGameboard.board[rowIndex][columnIndex].isMiss === false &&
-          computerGameboard.board[rowIndex][columnIndex].isHit === false
-        ) {
-          player.attack(computerGameboard, rowIndex, columnIndex);
-          computer.toggleTurn();
-          let coordinates = computer.attack(playerGameboard);
-          console.log(coordinates);
-          playerUIBoard[coordinates].style.background = 'green';
-          player.toggleTurn();
-          plot.style.background = 'green';
-        } else {
-          console.log('try again!');
+            computerPlay(computer, playerGameboard, playerUIBoard);
+            player.toggleTurn();
+          } else {
+            console.log('try again!');
+          }
         }
-      } 
+      });
     });
-  });
-}
+  }
 
-function createGameboards() {
-  const gameboard = document.querySelectorAll('.gameboard-grid');
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-      const plot1 = document.createElement('div');
-      const plot2 = document.createElement('div');
-      plot1.classList.add('gameboard-grid-item');
-      plot2.classList.add('gameboard-grid-item');
-      plot1.dataset.x = i;
-      plot1.dataset.y = j;
-      plot2.dataset.x = i;
-      plot2.dataset.y = j;
-      gameboard[0].appendChild(plot1);
-      gameboard[1].appendChild(plot2);
+  function computerPlay(computer, enemyBoard, enemyUIBoard) {
+    computer.toggleTurn();
+    let coordinates = computer.attack(enemyBoard);
+    if (enemyBoard.board[coordinates[0]][coordinates[1]].isHit) {
+      controller.showHitMarker(enemyUIBoard[parseInt(coordinates.join(''))]);
+    } else if (enemyBoard.board[coordinates[0]][coordinates[1]].isMiss) {
+      controller.showMissMarker(enemyUIBoard[parseInt(coordinates.join(''))]);
     }
   }
-}
 
-function displayContent() {
-  const resetBtn = document.querySelector('.button-reset');
-  const gameboardsContainer = document.querySelector('.gameboards-container');
-  resetBtn.style.display = 'inline-block';
-  gameboardsContainer.style.opacity = 1;
-}
-
-function isGameOver(playersBoard, computersBoard) {
-  if (playersBoard.isGameOver()) {
-    return true;
-  } else if (computersBoard.isGameOver()) {
-    return true;
-  } else {
-    return false;
+  function isGameOver(playersBoard, computersBoard) {
+    if (playersBoard.isGameOver()) {
+      return true;
+    } else if (computersBoard.isGameOver()) {
+      return true;
+    } else {
+      return false;
+    }
   }
+
+  return { initialize };
 }
 
 Game().initialize();
