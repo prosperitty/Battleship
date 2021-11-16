@@ -2,7 +2,6 @@ import './style.scss';
 import { Gameboard } from './gameboard';
 import { Player } from './player';
 import { Controller } from './dom';
-import { Ship } from './ship';
 
 function Game() {
   const controller = Controller();
@@ -31,17 +30,17 @@ function Game() {
 
     computerUIBoard.forEach((plot) => {
       plot.addEventListener('click', () => {
-        let rowIndex = parseInt(plot.dataset.x);
-        let colIndex = parseInt(plot.dataset.y);
+        let row = parseInt(plot.dataset.x);
+        let col = parseInt(plot.dataset.y);
         if (player.turn && !isGameOver(playerGameboard, computerGameboard)) {
           if (
-            computerGameboard.board[rowIndex][colIndex].isMiss === false &&
-            computerGameboard.board[rowIndex][colIndex].isHit === false
+            computerGameboard.board[row][col].isMiss === false &&
+            computerGameboard.board[row][col].isHit === false
           ) {
-            player.attack(computerGameboard, rowIndex, colIndex);
-            if (computerGameboard.board[rowIndex][colIndex].isHit) {
+            player.attack(computerGameboard, row, col);
+            if (computerGameboard.board[row][col].isHit) {
               controller.showHitMarker(plot);
-            } else if (computerGameboard.board[rowIndex][colIndex].isMiss) {
+            } else if (computerGameboard.board[row][col].isMiss) {
               controller.showMissMarker(plot);
             }
 
