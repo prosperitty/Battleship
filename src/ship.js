@@ -28,5 +28,43 @@ function Ship(type, length) {
     }
   }
 
-  return { getHitPositions, hit, isSunk, shipStatus, getLength };
+  function cells(board, direction, corner) {
+    let cellList = [];
+    if (direction === 'h') {
+      for (let i = 0; i < getLength(); i++) {
+        cellList[i] = board[corner[0] + i][corner[1]];
+      }
+    }
+    if (direction === 'v') {
+      for (let i = 0; i < getLength(); i++) {
+        cellList[i] = board[corner[0]][corner[1] + i];
+      }
+    }
+    return cellList;
+  }
+
+  function canFit(board, direction, corner) {
+    let cellList = cells(board, direction, corner);
+    for (let i = 0; i < getLength(); i++) {
+      if (cellList[i].ship) return false;
+    }
+    return true;
+  }
+
+  function insert(board, direction, corner) {
+    let cellList = cells(board, direction, corner);
+    for (let i = 0; i < getLength(); i++) {
+      cellList[i].ship = this;
+    }
+  }
+
+  return {
+    getHitPositions,
+    hit,
+    isSunk,
+    shipStatus,
+    getLength,
+    canFit,
+    insert,
+  };
 }
