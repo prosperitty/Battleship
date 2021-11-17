@@ -25,6 +25,7 @@ function Game() {
     const playerGameboard = Gameboard(gameboards[0].children);
     const computerGameboard = Gameboard(gameboards[1].children);
     playerGameboard.placeShips();
+    playerGameboard.displayShip();
     computerGameboard.placeShips();
     player.toggleTurn();
 

@@ -4,6 +4,7 @@ function Ship(type, length) {
   const getLength = () => length;
   let shipStatus = { health: length, type };
   let hitPositions = [];
+  let shipCoordinates = [];
 
   function getHitPositions(board) {
     const plots = board
@@ -53,9 +54,12 @@ function Ship(type, length) {
 
   function insert(board, direction, corner) {
     let cellList = cells(board, direction, corner);
+    let coordinate = [];
     for (let i = 0; i < getLength(); i++) {
+      coordinate.push(cellList[i].coordinate);
       cellList[i].ship = this;
     }
+    this.shipCoordinates = [...coordinate];
   }
 
   return {
@@ -63,6 +67,7 @@ function Ship(type, length) {
     hit,
     isSunk,
     shipStatus,
+    shipCoordinates,
     getLength,
     canFit,
     insert,

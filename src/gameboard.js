@@ -1,4 +1,5 @@
 import { Ship } from './ship';
+import { Controller } from './dom';
 export { Gameboard };
 
 function Gameboard() {
@@ -70,6 +71,15 @@ function Gameboard() {
     console.log('failed');
   }
 
+  function displayShip() {
+    const controller = Controller();
+    for (let i = 0; i < ships.length; i++) {
+      for (let j = 0; j < ships[i].shipCoordinates.length; j++) {
+        controller.displayShips(ships[i].shipCoordinates[j]);
+      }
+    }
+  }
+
   function receiveAttack(row, column) {
     let plot = this.board[row][column];
     if (plot.ship !== null && plot.isHit === false && plot.isMiss === false) {
@@ -107,5 +117,5 @@ function Gameboard() {
     }
   };
 
-  return { board, placeShips, receiveAttack, isGameOver };
+  return { board, placeShips, receiveAttack, isGameOver, displayShip };
 }
