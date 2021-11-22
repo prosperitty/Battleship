@@ -48,12 +48,12 @@ function Game() {
               controller.showMissMarker(plot);
             }
           }
-        } 
+        }
         if (computer.turn && !gameOver) {
           computerPlay(computer, playerGameboard, playerUIBoard);
           gameOver = isGameOver(playerGameboard, computerGameboard);
           player.toggleTurn();
-        } 
+        }
       });
     });
   }
