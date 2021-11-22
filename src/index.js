@@ -22,8 +22,9 @@ function Game() {
     const computer = Player('computer');
     const playerUIBoard = [...gameboards[0].children];
     const computerUIBoard = [...gameboards[1].children];
-    const playerGameboard = Gameboard(gameboards[0].children);
-    const computerGameboard = Gameboard(gameboards[1].children);
+    const playerGameboard = Gameboard();
+    const computerGameboard = Gameboard();
+    let gameOver = false;
     playerGameboard.placeShips();
     playerGameboard.displayShip();
     computerGameboard.placeShips();
@@ -33,42 +34,47 @@ function Game() {
       plot.addEventListener('click', () => {
         let row = parseInt(plot.dataset.x);
         let col = parseInt(plot.dataset.y);
-        if (player.turn && !isGameOver(playerGameboard, computerGameboard)) {
+        if (player.turn && !gameOver) {
           if (
             computerGameboard.board[row][col].isMiss === false &&
             computerGameboard.board[row][col].isHit === false
           ) {
-            player.attack(computerGameboard, row, col);
+            player.attack(computerGameboard, row, col, plot);
+            gameOver = isGameOver(playerGameboard, computerGameboard);
+            computer.toggleTurn();
             if (computerGameboard.board[row][col].isHit) {
               controller.showHitMarker(plot);
             } else if (computerGameboard.board[row][col].isMiss) {
               controller.showMissMarker(plot);
             }
-
-            computerPlay(computer, playerGameboard, playerUIBoard);
-            player.toggleTurn();
-          } else {
-            console.log('try again!');
           }
-        }
+        } 
+        if (computer.turn && !gameOver) {
+          computerPlay(computer, playerGameboard, playerUIBoard);
+          gameOver = isGameOver(playerGameboard, computerGameboard);
+          player.toggleTurn();
+        } 
       });
     });
   }
 
   function computerPlay(computer, enemyBoard, enemyUIBoard) {
-    computer.toggleTurn();
     let coordinates = computer.attack(enemyBoard);
-    if (enemyBoard.board[coordinates[0]][coordinates[1]].isHit) {
+    let row = coordinates[0];
+    let col = coordinates[1];
+    if (enemyBoard.board[row][col].isHit) {
       controller.showHitMarker(enemyUIBoard[parseInt(coordinates.join(''))]);
-    } else if (enemyBoard.board[coordinates[0]][coordinates[1]].isMiss) {
+    } else if (enemyBoard.board[row][col].isMiss) {
       controller.showMissMarker(enemyUIBoard[parseInt(coordinates.join(''))]);
     }
   }
 
   function isGameOver(playersBoard, computersBoard) {
     if (playersBoard.isGameOver()) {
+      console.log('computer wins!');
       return true;
     } else if (computersBoard.isGameOver()) {
+      console.log('you win!');
       return true;
     } else {
       return false;
