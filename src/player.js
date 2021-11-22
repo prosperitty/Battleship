@@ -1,4 +1,3 @@
-import { Gameboard } from './gameboard';
 export { Player };
 
 function Player(name) {
