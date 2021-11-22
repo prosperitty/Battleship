@@ -38,9 +38,14 @@ function Gameboard() {
     let direction = ['v', 'h'][Math.floor(Math.random() * 2)];
     let max_col = 10;
     let max_row = 10;
-    if (direction === 'v') max_row -= ship.getLength() - 1;
-    if (direction === 'h') max_col -= ship.getLength() - 1;
-    if (max_row < 1 || max_col < 1) return false;
+    if (direction === 'v') {
+      max_col -= ship.getLength() - 1;
+    } else if (direction === 'h') {
+      max_row -= ship.getLength() - 1;
+    }
+    if (max_row < 1 || max_col < 1) {
+      return false;
+    }
     let corner = [
       Math.floor(Math.random() * max_col),
       Math.floor(Math.random() * max_row),
@@ -54,21 +59,17 @@ function Gameboard() {
   }
 
   function placeShips() {
-    for (let attempt = 0; attempt < 1000000; attempt++) {
-      initializeCells();
-      let attemptSuccessful = true;
-      for (let i = 0; i < ships.length; i++) {
-        if (!placeShip(ships[i])) {
-          attemptSuccessful = false;
-          break;
-        }
-      }
-      if (attemptSuccessful) {
-        console.log(this.board);
-        return;
+    initializeCells();
+    let attemptSuccessful = true;
+    let i = 0;
+    while (attemptSuccessful && i < ships.length) {
+      if (!placeShip(ships[i])) {
+        attemptSuccessful = false;
+        placeShips();
+      } else {
+        i++;
       }
     }
-    console.log('failed');
   }
 
   function displayShip() {
@@ -85,7 +86,6 @@ function Gameboard() {
     if (plot.ship !== null && plot.isHit === false && plot.isMiss === false) {
       plot.ship.hit();
       plot.isHit = true;
-      console.log('hit!', row, column);
       return true;
     } else if (
       plot.ship === null &&
@@ -93,10 +93,8 @@ function Gameboard() {
       plot.isMiss === false
     ) {
       plot.isMiss = true;
-      console.log('miss!', row, column);
       return true;
     } else if (plot.isHit === true || plot.isMiss === true) {
-      console.log('plot has already been hit', row, column);
       return false;
     }
   }
