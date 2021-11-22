@@ -30,15 +30,16 @@ function Controller() {
   }
 
   function displayShips(coordinate) {
-    playerUIBoard[parseInt(coordinate.join(''))].style.background = 'black';
+    playerUIBoard[parseInt(coordinate.join(''))].style.background = 'blue';
+    playerUIBoard[parseInt(coordinate.join(''))].style.border = '0.5px solid lime';
   }
 
   function showHitMarker(element) {
-    element.style.background = 'lime';
+    element.style.background = 'red';
   }
 
   function showMissMarker(element) {
-    element.style.background = 'red';
+    element.style.background = 'rgba(164, 164, 164)';
   }
   
   return { createUIGameboards, displayUIHeader, showHitMarker, showMissMarker, displayShips };
