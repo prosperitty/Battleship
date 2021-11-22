@@ -1,53 +1,76 @@
 import { Gameboard } from './gameboard';
 
-test('coordinate assignment', () => {
-  const game = Gameboard();
-  expect(game.board[0][0]).toEqual({
-    coordinate: [0, 0],
-    ship: null,
-    isHit: false,
-    isMiss: false,
-  });
-});
+// test('place ships on board at random positions', () => {
+//   const game = Gameboard();
+//   let expected = {ship: null};
+//   game.placeShips();
+//   game.board.forEach((row) => {
+//     for (let plot of row) {
+//       expect(plot).toEqual(expect.not.objectContaining(expected));
+//     }
+//   });
+// });
 
-test('place ships on board at specific coordinates', () => {
+describe('players gameboard', () => {
   const game = Gameboard();
-  game.placeShips(game.board);
-  expect(game.board[0][0].ship.shipStatus).toEqual({
-    health: 5,
-    type: 'carrier',
+  let expected = [
+    {
+      coordinate: [expect.any(Number), expect.any(Number)],
+      ship: null,
+      isHit: false,
+      isMiss: false,
+    },
+  ];
+  game.placeShips();
+  game.board.forEach((row) => {
+    it('has empty plots', () => {
+      expect(row).toEqual(expect.arrayContaining(expected));
+    });
+    it('has ships in plots', () => {
+      expect(row).toContainEqual(expect.not.arrayContaining(expected));
+    });
   });
 });
 
 test('determine if ship was missed or hit and send hit function', () => {
   const game = Gameboard();
+  let expected = {
+    coordinate: [expect.any(Number), expect.any(Number)],
+    ship: null,
+    isHit: false,
+    isMiss: false,
+  };
   game.placeShips();
-  game.receiveAttack(...[0, 1]);
-  expect(game.board[0][1].isMiss).toBeFalsy();
-  expect(game.board[0][1].isHit).toBeTruthy();
   game.receiveAttack(...[0, 7]);
-  expect(game.board[0][7].isMiss).toBeTruthy();
-  expect(game.board[0][7].isHit).toBeFalsy();
+  if (game.board[0][7].ship === expected.ship) {
+    expect(game.board[0][7].isMiss).toBeTruthy();
+    expect(game.board[0][7].isHit).toBeFalsy();
+  } else if (game.board[0][7].ship !== null) {
+    expect(game.board[0][7].isMiss).toBeFalsy();
+    expect(game.board[0][7].isHit).toBeTruthy();
+  }
 });
 
-test('report whether all ships have been sunk or not', () => {
+describe('whether all ships are sunk or not', () => {
   const game = Gameboard();
+  let expected = {
+    coordinate: [expect.any(Number), expect.any(Number)],
+    ship: null,
+    isHit: false,
+    isMiss: false,
+  };
   game.placeShips();
-  expect(game.isGameOver()).toBeFalsy();
-  for (let i = 0; i < 5; i++) {
-    game.receiveAttack(...[0, i]);
-  }
-  for (let i = 0; i < 4; i++) {
-    game.receiveAttack(...[9, i]);
-  }
-  for (let i = 0; i < 3; i++) {
-    game.receiveAttack(...[2, i]);
-  }
-  game.receiveAttack(...[4, 0]);
-  game.receiveAttack(...[4, 1]);
-  game.receiveAttack(...[4, 4]);
-  game.receiveAttack(...[4, 5]);
-  game.receiveAttack(...[6, 7]);
-  game.receiveAttack(...[2, 8]);
-  expect(game.isGameOver()).toBeTruthy();
+  it('reports all ships are not sunk', () => {
+    expect(game.isGameOver()).toBeFalsy();
+  });
+  it('reports all ships are sunk', () => {
+    game.board.forEach((row) => {
+      for (let plot of row) {
+        if (plot.ship !== expected.ship) {
+          game.receiveAttack(...plot.coordinate);
+        }
+      }
+    });
+    expect(game.isGameOver()).toBeTruthy();
+  });
 });
