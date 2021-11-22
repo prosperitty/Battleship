@@ -6,22 +6,12 @@ function Ship(type, length) {
   let hitPositions = [];
   let shipCoordinates = [];
 
-  function getHitPositions(board) {
-    const plots = board
-      .reduce((a, b) => a.concat(b))
-      .filter(
-        (coordinate) => coordinate.isHit === true && coordinate.ship === this
-      );
-    return plots;
-  }
-
   const hit = (position) => {
     hitPositions.push(position);
     shipStatus.health -= 1;
   };
 
   function isSunk() {
-    // let numOfHitPositions = this.getHitPositions(board).length;
     if (shipStatus.health === 0 && hitPositions.length === getLength()) {
       return true;
     } else {
@@ -33,12 +23,12 @@ function Ship(type, length) {
     let cellList = [];
     if (direction === 'h') {
       for (let i = 0; i < getLength(); i++) {
-        cellList[i] = board[corner[0] + i][corner[1]];
+        cellList[i] = board[corner[0]][corner[1] + i];
       }
     }
     if (direction === 'v') {
       for (let i = 0; i < getLength(); i++) {
-        cellList[i] = board[corner[0]][corner[1] + i];
+        cellList[i] = board[corner[0] + i][corner[1]];
       }
     }
     return cellList;
@@ -47,7 +37,9 @@ function Ship(type, length) {
   function canFit(board, direction, corner) {
     let cellList = cells(board, direction, corner);
     for (let i = 0; i < getLength(); i++) {
-      if (cellList[i].ship) return false;
+      if (cellList[i].ship) {
+        return false;
+      }
     }
     return true;
   }
@@ -63,7 +55,6 @@ function Ship(type, length) {
   }
 
   return {
-    getHitPositions,
     hit,
     isSunk,
     shipStatus,
