@@ -102,7 +102,6 @@ function Gameboard() {
   function resetShips() {
     for (let i = 0; i < ships.length; i++) {
       ships[i].resetShip();
-      ships[i].shipStatus.health = ships[i].getLength();
     }
   }
 
@@ -122,5 +121,12 @@ function Gameboard() {
     }
   }
 
-  return { board, placeShips, receiveAttack, isGameOver, displayShip, resetShips };
+  return {
+    board,
+    placeShips,
+    receiveAttack,
+    isGameOver,
+    displayShip,
+    resetShips,
+  };
 }

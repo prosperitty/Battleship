@@ -6,6 +6,12 @@ function Ship(type, length) {
   let hitPositions = [];
   let shipCoordinates = [];
 
+  function resetShip() {
+    hitPositions = [];
+    shipCoordinates = [];
+    this.shipStatus.health = getLength();
+  }
+
   const hit = (position) => {
     hitPositions.push(position);
     shipStatus.health -= 1;
@@ -62,5 +68,6 @@ function Ship(type, length) {
     getLength,
     canFit,
     insert,
+    resetShip,
   };
 }
