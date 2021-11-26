@@ -17,6 +17,7 @@ function Game() {
   }
 
   function startGame() {
+    const resetBtn = document.querySelector('.button-reset');
     const gameboards = document.querySelectorAll('.gameboard-grid');
     const player = Player('player');
     const computer = Player('computer');
@@ -55,6 +56,19 @@ function Game() {
           player.toggleTurn();
         }
       });
+    });
+
+    resetBtn.addEventListener('click', () => {
+      controller.resetUIBoard();
+      playerGameboard.placeShips();
+      playerGameboard.resetShips();
+      playerGameboard.displayShip();
+      computerGameboard.placeShips();
+      computerGameboard.resetShips();
+      player.turn = false;
+      computer.turn = false;
+      gameOver = false;
+      player.toggleTurn();
     });
   }
 
