@@ -30,17 +30,27 @@ function Controller() {
   }
 
   function displayShips(coordinate) {
-    playerUIBoard[parseInt(coordinate.join(''))].style.background = 'blue';
-    playerUIBoard[parseInt(coordinate.join(''))].style.border = '0.5px solid lime';
+    playerUIBoard[parseInt(coordinate.join(''))].style.background = 'rgb(208, 208, 251)';
   }
 
   function showHitMarker(element) {
-    element.style.background = 'red';
+    element.style.background = 'rgb(254, 187, 187)';
   }
 
   function showMissMarker(element) {
-    element.style.background = 'rgba(164, 164, 164)';
+    element.style.background = 'rgb(210, 210, 210)';
+  }
+
+  function resetUIBoard() {
+    const playerUIBoard = [...gameboards[0].children];
+    const computerUIBoard = [...gameboards[1].children];
+    playerUIBoard.forEach((e) => {
+      e.style.background = 'white';
+    });
+    computerUIBoard.forEach((e) => {
+      e.style.background = 'white';
+    });
   }
   
-  return { createUIGameboards, displayUIHeader, showHitMarker, showMissMarker, displayShips };
+  return { createUIGameboards, displayUIHeader, showHitMarker, showMissMarker, displayShips, resetUIBoard };
 }
