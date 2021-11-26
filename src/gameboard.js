@@ -99,21 +99,28 @@ function Gameboard() {
     }
   }
 
-  const isGameOver = () => {
+  function resetShips() {
+    for (let i = 0; i < ships.length; i++) {
+      ships[i].resetShip();
+      ships[i].shipStatus.health = ships[i].getLength();
+    }
+  }
+
+  function isGameOver() {
     if (
-      carrier.isSunk(board) &&
-      battleship.isSunk(board) &&
-      cruiser.isSunk(board) &&
-      destroyer1.isSunk(board) &&
-      destroyer2.isSunk(board) &&
-      submarine1.isSunk(board) &&
-      submarine2.isSunk(board)
+      carrier.isSunk(this.board) &&
+      battleship.isSunk(this.board) &&
+      cruiser.isSunk(this.board) &&
+      destroyer1.isSunk(this.board) &&
+      destroyer2.isSunk(this.board) &&
+      submarine1.isSunk(this.board) &&
+      submarine2.isSunk(this.board)
     ) {
       return true;
     } else {
       return false;
     }
-  };
+  }
 
-  return { board, placeShips, receiveAttack, isGameOver, displayShip };
+  return { board, placeShips, receiveAttack, isGameOver, displayShip, resetShips };
 }

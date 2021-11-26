@@ -1,15 +1,15 @@
 import { Gameboard } from './gameboard';
 
-// test('place ships on board at random positions', () => {
-//   const game = Gameboard();
-//   let expected = {ship: null};
-//   game.placeShips();
-//   game.board.forEach((row) => {
-//     for (let plot of row) {
-//       expect(plot).toEqual(expect.not.objectContaining(expected));
-//     }
-//   });
-// });
+test('place ships on board at random positions', () => {
+  const game = Gameboard();
+  let expected = {ship: null};
+  game.placeShips();
+  game.board.forEach((row) => {
+    for (let plot of row) {
+      expect(plot.ship).toEqual(expect.not.objectContaining(expected));
+    }
+  });
+});
 
 describe('players gameboard', () => {
   const game = Gameboard();
