@@ -34,4 +34,5 @@ Once all ships have been sunk, the game is over and the game will end.
 
 ## References
 [The Odin Project](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/battleship)
+
 [Live Demo](https://alex-lvl.github.io/Battleship/)
