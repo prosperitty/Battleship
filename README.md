@@ -32,6 +32,15 @@ Once all ships have been sunk, the game is over and the game will end.
 - drag and drop ships
 - Add names
 
+## Learning Objectives
+- Test Driven Development
+- Jest 
+- Pure Functions
+- Mocking/Mock Functions
+- Webpack
+- ESLint
+- Babel
+
 ## References
 [The Odin Project](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/battleship)
 
